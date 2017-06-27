@@ -75,10 +75,10 @@ def start_bot():
         choice = raw_input("What you want to do?")
         if choice == "a":
             self_info()
-        if choice == "b":
+        elif choice == "b":
             insta_user_name = raw_input("Enter the user name whose information you want to fetch: ")
             get_user_info(insta_user_name)
-        if choice == "c":
+        elif choice == "c":
             exit()
         else:
             print "Enter alphbet from a to c only"
