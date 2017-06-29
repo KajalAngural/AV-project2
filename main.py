@@ -13,8 +13,8 @@ def self_info():
 
     if user_info['meta']['code'] == 200:        #200 means ecerything is going well
         if len(user_info['data']):
-            print "User name: %s" %(user_info['data']['username'])
-            print "Followers:  %s" %(user_info['data']['counts']['followed_by'])
+            print "User name: %s" % (user_info['data']['username'])
+            print "Followers:  %s" % (user_info['data']['counts']['followed_by'])
             print "Following:  %s" % (user_info['data']['counts']['follows'])
             print "Posts:  %s" % (user_info['data']['counts']['media'])
         else:
@@ -52,9 +52,9 @@ def get_user_info(insta_user_name):
     if user_info['meta']['code'] == 200:
         if len(user_info['data']):
             print "User name: %s" %(user_info['data']['username'])
-            print "Number of followers: %s" (user_info['data']['counts']['followed_by'])
-            print "Number of users you are following: %s"(user_info['data']['counts']['follows'])
-            print "Number of posts: %s"(user_info['data']['counts']['media'])
+            print "Number of followers: %s" %(user_info['data']['counts']['followed_by'])
+            print "Number of users you are following: %s" %(user_info['data']['counts']['follows'])
+            print "Number of posts: %s" %(user_info['data']['counts']['media'])
         else:
             print "No data for this user exist!!"
     else:
@@ -69,13 +69,54 @@ def get_own_post():
     if own_media['meta']['code'] == 200:
         if len(own_media['data']):
             image_name = own_media['data'][0]['id'] +".jpeg"
-            image_url =  own_media['data'][0]['images']['standard resolution']['url']
+            image_url =  own_media['data'][0]['images']['standard_resolution']['url']
             urllib.urlretrieve(image_url,image_name)
             print "Your image has been downloaded!!"
         else:
             print "Media does not exist!!"
     else:
         print "Code other than 200!!"
+
+
+#defining a function to get the id of recent media
+def get_media_id(insta_user_name):
+    user_id = get_user_id(insta_user_name)
+    if user_id == None:
+        print "User does not exist!!"
+    request_url = Base_url + "users/%s/media/recent/?access_token=%s" % (user_id, App_access_token)
+    user_media = requests.get(request_url).json()
+
+    if user_media['meta']['code'] == 200:
+        if len(user_media['data']):
+            media_id = user_media['data'][0]['id']
+            return media_id
+        else:
+            print "Media does not exist!!"
+    else:
+        print "Code other than 200!!"
+
+
+#defining a function to get a list of comments in recent post
+def get_comment_list(insta_user_name):
+    media_id = get_media_id(insta_user_name)
+    request_url = Base_url + "media/%s/comments?access_token=%s" %(media_id, App_access_token)
+    user_comments = requests.get(request_url).json()
+    if user_comments['meta']['data'] == 200:
+        if user_comments['data']:
+            print "Comment at: %s" %(user_comments['data']['created_time'])
+            print "Comment is: %s" %(user_comments['data']['text'])
+            print "Comment from: %s" %(user_comments['data']['from']['username'])
+
+        else:
+            print "Media does not exist!!"
+    else:
+        print "Code other than 200!!"
+
+
+
+
+
+
 
 
 #defining function to get the recent post of user by his/her name
@@ -89,7 +130,7 @@ def get_user_post(insta_user_name):
     if user_media['meta']['code'] == 200:
         if len(user_media['data']):
             image_name = user_media['data'][0]['id'] +".jpeg"
-            image_url =  user_media['data'][0]['images']['standard resolution']['url']
+            image_url =  user_media['data'][0]['images']['standard_resolution']['url']
             urllib.urlretrieve(image_url,image_name)
             print "Your image has been downloaded!!"
         else:
@@ -98,12 +139,15 @@ def get_user_post(insta_user_name):
         print "Code other than 200!!"
 
 
+
+ 
+
 #defining our main function calling other functions
 def start_bot():
     while True:
         print "Welcome to InstaBot"
         print "Here is the menu, Select the option according to your requirements!!"
-        print "a.Get your own details\nb.Get details of nay user by his/her username\nc.Get own recent post\nd.Get recent post of user by his/her name\ne.Exit "
+        print "a.Get your own details\nb.Get details of any user by his/her username\nc.Get own recent post\nd.Get recent post of user by his/her name\ne.Get comment list of a media\nf.Exit "
 
         choice = raw_input("What you want to do?")
         if choice == "a":       #to get detials of the owner of the access token
@@ -116,7 +160,10 @@ def start_bot():
         elif choice == "d":     #to get recent post of user
             insta_user_name = raw_input("Enter the name of the user whose recent post you want to fetch?")
             get_user_post(insta_user_name)
-        elif choice == "e":     #to exit
+        elif choice == "e":     #to get comment list of recent post of user
+            insta_user_name = raw_input("Enter the name of the user whose comment list you want to fetch?")
+            get_comment_list(insta_user_name)
+        elif choice == "f":     #to exit
             exit()
         else:
             print "Enter alphbet from a to c only"
