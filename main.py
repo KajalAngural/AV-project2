@@ -145,12 +145,28 @@ def get_user_post(insta_user_name):
 def like_post():
     media_id = get_media_id(insta_user_name)
     request_url = Base_url + "media/%s/likes" %(media_id)
-    payload = { "access_token" = App_access_token}
+    payload = { "access_token" : App_access_token}
     like_media = requests.post(request_url,payload).json()
     if like_media['meta']['code'] == 200:
         print "You liked the post"
     else:
         print "Your like was unsuccessful! Try again!!"
+
+
+
+#defining function to post a comment on recent post of user
+def post_comment():
+    media_id = get_media_id(insta_user_name)
+    comment = raw_input("What do you want to comment?")
+    request_url = Base_url +"media/%s/comments" %(media_id)
+    payload = { "access_token" : App_access_token, "text" : comment}
+    comment_info = requests.post(request_url, payload).json()
+    if comment_info['meta']['code'] == 200:
+        print "Comment posted successfully!!"
+    else:
+        print "Comment posting not successfull. Try again!!"
+
+
 
 
 
