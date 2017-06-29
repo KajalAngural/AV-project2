@@ -140,14 +140,32 @@ def get_user_post(insta_user_name):
 
 
 
- 
+
+#defining function to like a post of the user by his/her username
+def like_post():
+    media_id = get_media_id(insta_user_name)
+    request_url = Base_url + "media/%s/likes" %(media_id)
+    payload = { "access_token" = App_access_token}
+    like_media = requests.post(request_url,payload).json()
+    if like_media['meta']['code'] == 200:
+        print "You liked the post"
+    else:
+        print "Your like was unsuccessful! Try again!!"
+
+
 
 #defining our main function calling other functions
 def start_bot():
     while True:
         print "Welcome to InstaBot"
         print "Here is the menu, Select the option according to your requirements!!"
-        print "a.Get your own details\nb.Get details of any user by his/her username\nc.Get own recent post\nd.Get recent post of user by his/her name\ne.Get comment list of a media\nf.Exit "
+        print "a.Get your own details"
+        print "b.Get details of any user by his/her username"
+        print "c.Get own recent post"
+        print "d.Get recent post of user by his/her name"
+        print "e.Get comment list of a media"
+        print "f.Like a recent post of the user by his/her username"
+        print "g.Exit "
 
         choice = raw_input("What you want to do?")
         if choice == "a":       #to get detials of the owner of the access token
@@ -163,7 +181,10 @@ def start_bot():
         elif choice == "e":     #to get comment list of recent post of user
             insta_user_name = raw_input("Enter the name of the user whose comment list you want to fetch?")
             get_comment_list(insta_user_name)
-        elif choice == "f":     #to exit
+        elif choice == "f":     #to like recent post of user
+            insta_user_name = raw_input("Enter the name of the user whose recent post you want to like?")
+            like_post(insta_user_name)
+        elif choice == "g":     #to exit
             exit()
         else:
             print "Enter alphbet from a to c only"
