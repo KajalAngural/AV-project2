@@ -1,6 +1,7 @@
 from key import App_access_token        #importing App_access_token from another file
 import requests     #importing request library
 import urllib       #importing urllib library
+
 Base_url = "https://api.instagram.com/v1/"
 
 
@@ -102,20 +103,30 @@ def get_comment_list(insta_user_name):
     request_url = Base_url + "media/%s/comments?access_token=%s" %(media_id, App_access_token)
     user_comments = requests.get(request_url).json()
     if user_comments['meta']['code'] == 200:
-        if user_comments['data']:
-            print "Comment at: %s" %(user_comments['data']['created_time'])
-            print "Comment is: %s" %(user_comments['data']['text'])
-            print "Comment from: %s" %(user_comments['data']['from']['username'])
-
-        else:
-            print "Media does not exist!!"
+       if user_comments['data']:
+           for x in range(0,len(user_comments['data'])):
+               print user_comments['data'][x]['text']
+       else:
+            print "Comments does not exist!!"
     else:
         print "Code other than 200!!"
 
 
 
 
-
+#defining a function to fetch list of usernames who liked recent post of the given user
+def get_like_list(insta_user_name):
+    media_id = get_media_id(insta_user_name)
+    request_url = Base_url + "media/%s/likes?access_token=%s" % (media_id, App_access_token)
+    user_comments = requests.get(request_url).json()
+    if user_comments['meta']['code'] == 200:
+        if user_comments['data']:
+            for x in range(0, len(user_comments['data'])):
+                print user_comments['data'][x]['username']
+        else:
+            print "Likes does not exist!!"
+    else:
+        print "Code other than 200!!"
 
 
 
@@ -168,7 +179,7 @@ def post_comment(insta_user_name):
 
 
 
-#defining function to fetch recent media liked by user
+#defining function to fetch recent media liked by self
 def get_recent_media():
     request_url = Base_url +"users/self/media/liked?access_token=%s" %(App_access_token)
     recent_media = requests.get(request_url).json()
@@ -197,10 +208,11 @@ def start_bot():
         print "c.Get own recent post"
         print "d.Get recent post of user by his/her name"
         print "e.Get comment list of a media"
-        print "f.Like a recent post of the user by his/her username"
-        print "g.Post a comment on recent post of user"
-        print "h.Fetch recent media liked by self"
-        print "i.Exit"
+        print "f.Get list of usernames who liked the media"
+        print "g.Like a recent post of the user by his/her username"
+        print "h.Post a comment on recent post of user"
+        print "i.Fetch recent media liked by self"
+        print "j.Exit"
 
         choice = raw_input("What you want to do?")
         if choice == "a":       #to get detials of the owner of the access token
@@ -216,15 +228,18 @@ def start_bot():
         elif choice == "e":     #to get comment list of recent post of user
             insta_user_name = raw_input("Enter the name of the user whose comment list you want to fetch?")
             get_comment_list(insta_user_name)
-        elif choice == "f":     #to like recent post of user
+        elif choice == "f":     #to get list of usernames who liked the media
+            insta_user_name = raw_input("Enter the name of the user whose like list you want to fetch?")
+            get_like_list(insta_user_name)
+        elif choice == "g":     #to like recent post of user
             insta_user_name = raw_input("Enter the name of the user whose recent post you want to like?")
             like_post(insta_user_name)
-        elif choice == "g":     #to comment recent post of user
+        elif choice == "h":     #to comment recent post of user
             insta_user_name = raw_input("Enter the name of the user on whose recent post you want to comment?")
             post_comment(insta_user_name)
-        elif choice == "h":  # to fetch recent post liked by self
+        elif choice == "i":  # to fetch recent post liked by self
             get_recent_media()
-        elif choice == "i":     #to exit
+        elif choice == "j":     #to exit
             exit()
         else:
             print "Enter valid option!!"
