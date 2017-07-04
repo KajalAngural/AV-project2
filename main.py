@@ -1,6 +1,9 @@
 from key import App_access_token        #importing App_access_token from another file
 import requests     #importing request library
 import urllib       #importing urllib library
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud
+import setuptools
 
 Base_url = "https://api.instagram.com/v1/"
 
@@ -195,6 +198,69 @@ def get_recent_media():
         print "Code other than 200"
 
 
+#defining a function to fetch a random post by asking the user which post he want to fetch
+def get_random_media(insta_user_name):
+    user_id = get_user_id(insta_user_name)
+    if user_id == None:
+        print "User does not exist!!"
+    request_url = Base_url + "users/%s/media/recent/?access_token=%s" % (user_id, App_access_token)
+    user_media = requests.get(request_url).json()
+
+    if user_media['meta']['code'] == 200:
+        if len(user_media['data']):
+            post_number = raw_input("Enter the number of post which you want to fetch?")
+            post_number = int(post_number)
+            x = post_number - 1
+            image_name = user_media['data'][x]['id'] + ".jpeg"
+            image_url = user_media['data'][x]['images']['standard_resolution']['url']
+            urllib.urlretrieve(image_url, image_name)
+            print "Your image has been downloaded!!"
+        else:
+            print "Media does not exist!!"
+    else:
+        print "Code other than 200!!"
+
+
+
+
+#defining function to fetch subtrends
+def subtrend_fetch():
+    hash_dict = {
+
+    }
+    tag_name = raw_input("Which is the trending one?")
+    request_url = Base_url + "tags/%s/media/recent?access_token=%s" %(tag_name,App_access_token)
+    trending_tag = requests.get(request_url).json()
+    if trending_tag['meta']['code'] == 200:
+        if trending_tag['data']:
+            for x in range(0,len(trending_tag['data'])):
+                tags =  trending_tag['data'][x]['tags']
+
+                for y in range(0,len(tags)):
+                    if trending_tag['data'][x]['tags'][y] in hash_dict:
+                        hash_dict[trending_tag['data'][x]['tags'][y]] += 1
+                    else:
+                        hash_dict[trending_tag['data'][x]['tags'][y]] = 1
+
+        else:
+            print "Media doesnot exist!!"
+    else:
+        print "Code other than 200!"
+
+    hash_dict.pop(tag_name.lower(),None)
+    print hash_dict
+
+   #ploting wordcloud
+    wordcloud= WordCloud().generate_from_frequencies(hash_dict)
+
+    plt.imshow(wordcloud,interpolation='bilinear')
+    plt.show()
+
+
+
+
+
+
 
 
 
@@ -212,7 +278,9 @@ def start_bot():
         print "g.Like a recent post of the user by his/her username"
         print "h.Post a comment on recent post of user"
         print "i.Fetch recent media liked by self"
-        print "j.Exit"
+        print "j.Fetch random post of the user"
+        print "k.Fetch hashtags"
+        print "l.Exit"
 
         choice = raw_input("What you want to do?")
         if choice == "a":       #to get detials of the owner of the access token
@@ -239,7 +307,12 @@ def start_bot():
             post_comment(insta_user_name)
         elif choice == "i":  # to fetch recent post liked by self
             get_recent_media()
-        elif choice == "j":     #to exit
+        elif choice == "j":     #to get random post of user
+            insta_user_name = raw_input("Enter the name of the user on whose random post you want to fetch?")
+            get_random_media(insta_user_name)
+        elif choice == "k":     #to get fetch hashtag
+            subtrend_fetch()
+        elif choice == "l":     #to exit
             exit()
         else:
             print "Enter valid option!!"
