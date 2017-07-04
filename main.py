@@ -1,9 +1,11 @@
 from key import App_access_token        #importing App_access_token from another file
 import requests     #importing request library
 import urllib       #importing urllib library
-import matplotlib.pyplot as plt
-from wordcloud import WordCloud
+import matplotlib.pyplot as plt     #importing matplotlib
+from wordcloud import WordCloud     #importing wordcloud
 import setuptools
+
+#sandbox users: apoorav613
 
 Base_url = "https://api.instagram.com/v1/"
 
@@ -287,29 +289,56 @@ def start_bot():
             self_info()
         elif choice == "b":     #to get detials of a user
             insta_user_name = raw_input("Enter the user name whose information you want to fetch: ")
-            get_user_info(insta_user_name)
+            if len(insta_user_name):
+                get_user_info(insta_user_name)
+            else:
+                print "Enter valid name!!"
         elif choice == "c":     #to get own recent post
             get_own_post()
         elif choice == "d":     #to get recent post of user
             insta_user_name = raw_input("Enter the name of the user whose recent post you want to fetch?")
-            get_user_post(insta_user_name)
+            if len(insta_user_name):
+                get_user_post(insta_user_name)
+            else:
+                print "Enter valid name!!"
+
         elif choice == "e":     #to get comment list of recent post of user
             insta_user_name = raw_input("Enter the name of the user whose comment list you want to fetch?")
-            get_comment_list(insta_user_name)
+            if len(insta_user_name):
+                get_comment_list(insta_user_name)
+            else:
+                print "Enter valid name!!"
+
         elif choice == "f":     #to get list of usernames who liked the media
             insta_user_name = raw_input("Enter the name of the user whose like list you want to fetch?")
-            get_like_list(insta_user_name)
+            if len(insta_user_name):
+                get_like_list(insta_user_name)
+            else:
+                print "Enter valid name!!"
+
         elif choice == "g":     #to like recent post of user
             insta_user_name = raw_input("Enter the name of the user whose recent post you want to like?")
-            like_post(insta_user_name)
+            if len(insta_user_name):
+                like_post(insta_user_name)
+            else:
+                print "Enter valid name!!"
+
         elif choice == "h":     #to comment recent post of user
             insta_user_name = raw_input("Enter the name of the user on whose recent post you want to comment?")
-            post_comment(insta_user_name)
+            if len(insta_user_name):
+                post_comment(insta_user_name)
+            else:
+                print "Enter valid name!!"
+
         elif choice == "i":  # to fetch recent post liked by self
             get_recent_media()
         elif choice == "j":     #to get random post of user
             insta_user_name = raw_input("Enter the name of the user on whose random post you want to fetch?")
-            get_random_media(insta_user_name)
+            if len(insta_user_name):
+                get_random_media(insta_user_name)
+            else:
+                print "Enter valid name!!"
+
         elif choice == "k":     #to get fetch hashtag
             subtrend_fetch()
         elif choice == "l":     #to exit
