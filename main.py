@@ -3,8 +3,8 @@ import requests     #importing request library
 import urllib       #importing urllib library
 import matplotlib.pyplot as plt     #importing matplotlib
 from wordcloud import WordCloud     #importing wordcloud
-import setuptools
-
+import string
+import string
 #sandbox users: apoorav613
 
 Base_url = "https://api.instagram.com/v1/"
@@ -275,7 +275,7 @@ def start_bot():
         print "b.Get details of any user by his/her username"
         print "c.Get own recent post"
         print "d.Get recent post of user by his/her name"
-        print "e.Get comment list of a media"
+        print "e.Get comment list of a recent media of user"
         print "f.Get list of usernames who liked the media"
         print "g.Like a recent post of the user by his/her username"
         print "h.Post a comment on recent post of user"
@@ -289,44 +289,54 @@ def start_bot():
             self_info()
         elif choice == "b":     #to get detials of a user
             insta_user_name = raw_input("Enter the user name whose information you want to fetch: ")
-            if len(insta_user_name):
+            if len(insta_user_name) and insta_user_name.isdigit()==False and insta_user_name.find('@') == -1 and insta_user_name.find('#') == -1 and insta_user_name.find(' ') == -1 and insta_user_name.find('$') == -1 and insta_user_name.find('!') == -1:
                 get_user_info(insta_user_name)
+
             else:
                 print "Enter valid name!!"
+
         elif choice == "c":     #to get own recent post
             get_own_post()
         elif choice == "d":     #to get recent post of user
             insta_user_name = raw_input("Enter the name of the user whose recent post you want to fetch?")
-            if len(insta_user_name):
+            if len(insta_user_name) and insta_user_name.isdigit() == False and insta_user_name.find('@') == -1 and insta_user_name.find('#') == -1 and insta_user_name.find( ' ') == -1 and insta_user_name.find('$') == -1 and insta_user_name.find('!') == -1:
                 get_user_post(insta_user_name)
+
             else:
                 print "Enter valid name!!"
+
 
         elif choice == "e":     #to get comment list of recent post of user
             insta_user_name = raw_input("Enter the name of the user whose comment list you want to fetch?")
-            if len(insta_user_name):
+            if len(insta_user_name) and insta_user_name.isdigit() == False and insta_user_name.find('@') == -1 and insta_user_name.find('#') == -1 and insta_user_name.find( ' ') == -1 and insta_user_name.find('$') == -1 and insta_user_name.find('!') == -1:
                 get_comment_list(insta_user_name)
+
             else:
                 print "Enter valid name!!"
 
+
         elif choice == "f":     #to get list of usernames who liked the media
             insta_user_name = raw_input("Enter the name of the user whose like list you want to fetch?")
-            if len(insta_user_name):
+            if len(insta_user_name) and insta_user_name.isdigit() == False and insta_user_name.find('@') == -1 and insta_user_name.find('#') == -1 and insta_user_name.find( ' ') == -1 and insta_user_name.find('$') == -1 and insta_user_name.find('!') == -1:
                 get_like_list(insta_user_name)
+
             else:
                 print "Enter valid name!!"
 
         elif choice == "g":     #to like recent post of user
             insta_user_name = raw_input("Enter the name of the user whose recent post you want to like?")
-            if len(insta_user_name):
+            if len(insta_user_name) and insta_user_name.isdigit() == False and insta_user_name.find('@') == -1 and insta_user_name.find('#') == -1 and insta_user_name.find(' ') == -1 and insta_user_name.find('$') == -1 and insta_user_name.find('!') == -1:
                 like_post(insta_user_name)
+
             else:
                 print "Enter valid name!!"
 
+
         elif choice == "h":     #to comment recent post of user
             insta_user_name = raw_input("Enter the name of the user on whose recent post you want to comment?")
-            if len(insta_user_name):
+            if len(insta_user_name) and insta_user_name.isdigit() == False and insta_user_name.find('@') == -1 and insta_user_name.find('#') == -1 and insta_user_name.find(' ') == -1 and insta_user_name.find('$') == -1 and insta_user_name.find('!') == -1:
                 post_comment(insta_user_name)
+
             else:
                 print "Enter valid name!!"
 
@@ -334,10 +344,12 @@ def start_bot():
             get_recent_media()
         elif choice == "j":     #to get random post of user
             insta_user_name = raw_input("Enter the name of the user on whose random post you want to fetch?")
-            if len(insta_user_name):
+            if len(insta_user_name) and insta_user_name.isdigit() == False and insta_user_name.find('@') == -1 and insta_user_name.find('#') == -1 and insta_user_name.find(' ') == -1 and insta_user_name.find('$') == -1 and insta_user_name.find('!') == -1:
                 get_random_media(insta_user_name)
+
             else:
                 print "Enter valid name!!"
+
 
         elif choice == "k":     #to get fetch hashtag
             subtrend_fetch()
