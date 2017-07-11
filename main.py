@@ -3,13 +3,14 @@ import requests     #importing request library
 import urllib       #importing urllib library
 import matplotlib.pyplot as plt     #importing matplotlib
 from wordcloud import WordCloud     #importing wordcloud
-
+import colorama
+from termcolor import *
 
 #sandbox users: apoorav613
 
 Base_url = "https://api.instagram.com/v1/"
 
-
+colorama.init()
 #defining a function to fetch self information
 def self_info():
     request_url = Base_url + "users/self/?access_token=%s" %(App_access_token)
@@ -213,10 +214,13 @@ def get_random_media(insta_user_name):
             post_number = raw_input("Enter the number of post which you want to fetch?")
             post_number = int(post_number)
             x = post_number - 1
-            image_name = user_media['data'][x]['id'] + ".jpeg"
-            image_url = user_media['data'][x]['images']['standard_resolution']['url']
-            urllib.urlretrieve(image_url, image_name)
-            print "Your image has been downloaded!!"
+            if x < len(user_media['data']):
+                image_name = user_media['data'][x]['id'] + ".jpeg"
+                image_url = user_media['data'][x]['images']['standard_resolution']['url']
+                urllib.urlretrieve(image_url, image_name)
+                print "Your image has been downloaded!!"
+            else:
+                print "Post doesnt exist!!"
         else:
             print "Media does not exist!!"
     else:
@@ -270,7 +274,7 @@ def subtrend_fetch():
 #defining our main function calling other functions
 def start_bot():
     while True:
-        print "Welcome to InstaBot"
+        cprint ("Welcome to InstaBot",'blue')
         print "Here is the menu, Select the option according to your requirements!!"
         print "a.Get your own details"
         print "b.Get details of any user by his/her username"
@@ -294,7 +298,7 @@ def start_bot():
                 get_user_info(insta_user_name)
 
             else:
-                print "Enter valid name!!"
+                cprint ("Enter valid name!!",'red')
 
         elif choice == "c":     #to get own recent post
             get_own_post()
@@ -304,7 +308,7 @@ def start_bot():
                 get_user_post(insta_user_name)
 
             else:
-                print "Enter valid name!!"
+                cprint("Enter valid name!!", 'red')
 
 
         elif choice == "e":     #to get comment list of recent post of user
@@ -313,7 +317,7 @@ def start_bot():
                 get_comment_list(insta_user_name)
 
             else:
-                print "Enter valid name!!"
+                cprint("Enter valid name!!", 'red')
 
 
         elif choice == "f":     #to get list of usernames who liked the media
@@ -322,7 +326,7 @@ def start_bot():
                 get_like_list(insta_user_name)
 
             else:
-                print "Enter valid name!!"
+                cprint("Enter valid name!!", 'red')
 
         elif choice == "g":     #to like recent post of user
             insta_user_name = raw_input("Enter the name of the user whose recent post you want to like?")
@@ -330,7 +334,7 @@ def start_bot():
                 like_post(insta_user_name)
 
             else:
-                print "Enter valid name!!"
+                cprint("Enter valid name!!", 'red')
 
 
         elif choice == "h":     #to comment recent post of user
@@ -339,7 +343,7 @@ def start_bot():
                 post_comment(insta_user_name)
 
             else:
-                print "Enter valid name!!"
+                cprint("Enter valid name!!", 'red')
 
         elif choice == "i":  # to fetch recent post liked by self
             get_recent_media()
@@ -349,15 +353,14 @@ def start_bot():
                 get_random_media(insta_user_name)
 
             else:
-                print "Enter valid name!!"
-
+                cprint("Enter valid name!!", 'red')
 
         elif choice == "k":     #to get fetch hashtag
             subtrend_fetch()
         elif choice == "l":     #to exit
             exit()
         else:
-            print "Enter valid option!!"
+            cprint("Enter valid option!!", 'red')
 
 
 start_bot()
